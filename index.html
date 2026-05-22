@@ -715,9 +715,7 @@ body::after{
     <div class="hero-dots"></div>
     <div class="hero-top">
       <div class="hero-left">
-        <div class="sp-eyebrow">Текущий спринт</div>
-        <div class="sp-num" id="sp-num-val">1 из 3</div>
-        <div class="sp-dates" id="sp-dates">21 мая — 21 июня</div>
+        <div class="sp-eyebrow">Список целей на 21 мая - 30 августа</div>
         <div class="mission-goals">
           <div class="mission-goal" data-goal="tg">
             <input type="checkbox" class="mission-cb" id="goal-tg" onchange="toggleGoal('tg')">
@@ -915,9 +913,6 @@ function toggleGoal(goal){
 
 function renderDash(){
   if(!state.goals)state.goals={};
-  const sp=getCurrentSprint();
-  const nv=document.getElementById('sp-num-val');if(nv)nv.textContent=sp.num+' из 3';
-  const sd=document.getElementById('sp-dates');if(sd)sd.textContent=sp.dates;
 
   const checkedCount=[state.goals.tg,state.goals.health,state.goals.ozon,state.goals.camry].filter(Boolean).length;
   const pct=Math.round(checkedCount/4*100);
