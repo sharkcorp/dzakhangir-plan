@@ -70,12 +70,13 @@ body::after{
 .hero{
   margin:4px 16px 16px;
   background:linear-gradient(150deg,#0c1a42 0%,#07091c 42%,#0d0822 100%);
-  border-radius:26px;padding:22px 20px 18px;
+  border-radius:26px;padding:0;
   position:relative;overflow:hidden;
   box-shadow:
     0 0 0 1px rgba(79,195,247,.1),
     0 28px 70px rgba(0,0,0,.75),
     0 0 160px rgba(0,212,255,.04) inset;
+  display:flex;flex-direction:column;min-height:160px;
 }
 /* Strong top-right cyan corona */
 .hero::after{
@@ -89,92 +90,90 @@ body::after{
   background:radial-gradient(circle,rgba(107,33,168,.15) 0%,transparent 65%);
   pointer-events:none;
 }
-/* Bloom light behind ring — makes it feel alive */
+/* Bloom light behind ring */
 .ring-bloom{
-  position:absolute;right:-10px;top:-10px;
-  width:200px;height:200px;
-  background:radial-gradient(circle at 55% 45%,rgba(0,212,255,.28) 0%,rgba(0,212,255,.1) 35%,transparent 68%);
-  pointer-events:none;filter:blur(18px);
+  position:absolute;right:20px;top:20px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(74,158,255,.2) 0%,rgba(74,158,255,.05) 45%,transparent 70%);
+  pointer-events:none;filter:blur(16px);
 }
 /* Star particles */
 .hero-dots{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;border-radius:26px;}
 .hero-dots::before{
   content:'';position:absolute;width:2px;height:2px;border-radius:50%;
-  background:rgba(79,195,247,.7);top:22px;left:32px;
+  background:rgba(79,195,247,.6);top:24px;left:24px;
   box-shadow:
-    72px 8px 0 rgba(79,195,247,.35),36px 54px 0 rgba(79,195,247,.2),
-    150px 16px 0 rgba(180,92,255,.4),110px 58px 0 rgba(79,195,247,.15),
-    192px 24px 0 rgba(79,195,247,.28),12px 82px 0 rgba(180,92,255,.2),
-    240px 42px 0 rgba(79,195,247,.2),276px 14px 0 rgba(180,92,255,.15),
-    55px 100px 0 rgba(79,195,247,.12),180px 88px 0 rgba(180,92,255,.1);
+    48px 12px 0 rgba(74,158,255,.4),72px 8px 0 rgba(79,195,247,.3),
+    24px 64px 0 rgba(74,158,255,.2);
 }
 .hero-dots::after{
   content:'';position:absolute;width:1px;height:1px;border-radius:50%;
-  background:rgba(255,255,255,.6);top:60px;left:60px;
+  background:rgba(255,255,255,.5);top:56px;left:48px;
   box-shadow:
-    100px 20px 0 rgba(255,255,255,.4),50px 90px 0 rgba(255,255,255,.3),
-    220px 50px 0 rgba(255,255,255,.35),140px 100px 0 rgba(255,255,255,.25),
-    300px 30px 0 rgba(255,255,255,.2);
+    120px 16px 0 rgba(255,255,255,.35),80px 48px 0 rgba(255,255,255,.25);
 }
-.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;position:relative;z-index:1;}
-.hero-left{flex:1;padding-top:4px;}
-.sp-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(79,195,247,.85);text-transform:uppercase;margin-bottom:8px;}
-.sp-num{font-size:28px;font-weight:900;line-height:1;letter-spacing:-.5px;margin-bottom:6px;
-  text-shadow:0 0 30px rgba(79,195,247,.3);}
-.sp-dates{font-size:12px;color:var(--t2);}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;position:relative;z-index:1;padding:20px;flex:1;}
+.hero-left{flex:1;}
+.sp-eyebrow{font-size:11px;font-weight:700;letter-spacing:.5px;color:#fff;text-transform:uppercase;margin-bottom:4px;}
+.sp-num{font-size:28px;font-weight:800;line-height:1;letter-spacing:-.3px;color:#fff;margin-bottom:4px;}
+.sp-dates{font-size:14px;color:rgba(240,244,255,.55);margin-bottom:12px;}
 
-/* Ring 120px r=48 circ≈302 */
-.ring-wrap{width:124px;height:124px;position:relative;flex-shrink:0;}
-.ring-svg{width:124px;height:124px;transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:10;}
-.ring-fg{
-  fill:none;stroke:#00e8ff;stroke-width:11;stroke-linecap:round;
-  stroke-dasharray:302;stroke-dashoffset:302;
-  transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);
-  animation:ring-glow 2.8s ease-in-out infinite;
+/* Mission card in left column */
+.mission-row{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.2);
+  border-radius:12px;padding:10px 12px;position:relative;z-index:1;width:fit-content;
+  margin-bottom:4px;
 }
-@keyframes ring-glow{
+.mission-check{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:rgba(0,229,160,.25);
+  display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;font-weight:700;
+}
+.mission-txt{font-size:11px;color:rgba(240,244,255,.7);line-height:1.35;}
+.mission-txt strong{color:#fff;display:block;font-size:12px;font-weight:700;margin-bottom:1px;}
+
+/* Ring 90px r=36 circ≈226 */
+.ring-wrap{width:90px;height:90px;position:relative;flex-shrink:0;}
+.ring-svg{width:90px;height:90px;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:8;}
+.ring-fg{
+  fill:none;stroke:#4A9EFF;stroke-width:8;stroke-linecap:round;
+  stroke-dasharray:226;stroke-dashoffset:226;
+  transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);
+  animation:ring-glow-bright 2.8s ease-in-out infinite;
+}
+@keyframes ring-glow-bright{
   0%,100%{
     filter:
-      drop-shadow(0 0 6px #00e8ff)
-      drop-shadow(0 0 18px rgba(0,232,255,.85))
-      drop-shadow(0 0 40px rgba(0,232,255,.4))
-      drop-shadow(0 0 70px rgba(0,232,255,.15));
+      drop-shadow(0 0 5px #4A9EFF)
+      drop-shadow(0 0 12px rgba(74,158,255,.7))
+      drop-shadow(0 0 24px rgba(74,158,255,.3));
   }
   50%{
     filter:
-      drop-shadow(0 0 10px #00e8ff)
-      drop-shadow(0 0 28px rgba(0,232,255,1))
-      drop-shadow(0 0 60px rgba(0,232,255,.55))
-      drop-shadow(0 0 100px rgba(0,232,255,.22));
+      drop-shadow(0 0 8px #4A9EFF)
+      drop-shadow(0 0 18px rgba(74,158,255,.9))
+      drop-shadow(0 0 36px rgba(74,158,255,.4));
   }
 }
 .ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.ring-pct{font-size:24px;font-weight:900;color:#fff;line-height:1;letter-spacing:-.5px;}
-.ring-lbl{font-size:8px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+.ring-pct{font-size:28px;font-weight:700;color:#fff;line-height:1;}
 
-.mission-row{
-  display:flex;align-items:flex-start;gap:10px;margin-top:18px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);
-  border-radius:14px;padding:12px 14px;position:relative;z-index:1;
+.sp-progress{
+  margin-top:auto;position:relative;z-index:1;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:12px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
 }
-.mission-check{
-  width:24px;height:24px;border-radius:8px;flex-shrink:0;margin-top:1px;
-  background:rgba(0,229,160,0.14);border:1px solid rgba(0,229,160,0.28);
-  display:flex;align-items:center;justify-content:center;color:var(--green);font-size:13px;
-}
-.mission-txt{font-size:12px;color:var(--t2);line-height:1.45;}
-.mission-txt strong{color:var(--text);display:block;font-size:13px;font-weight:700;margin-bottom:2px;}
-
-.sp-progress{margin-top:14px;position:relative;z-index:1;}
-.sp-progress-track{height:2px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;}
+.sp-progress-track{height:2px;background:rgba(74,158,255,.3);border-radius:4px;overflow:hidden;width:100%;}
 .sp-progress-fill{
   height:100%;border-radius:4px;
-  background:linear-gradient(90deg,var(--blue2),var(--cyan));
-  box-shadow:0 0 8px rgba(0,212,255,.5);
+  background:linear-gradient(90deg,#1a5fff,#4A9EFF);
+  box-shadow:0 0 8px rgba(74,158,255,.6);
   transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0%;
 }
-.sp-progress-meta{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--t3);}
+.sp-progress-meta{font-size:12px;color:rgba(240,244,255,.55);text-align:center;}
 
 /* ── METRIC GRID ── */
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 16px 16px;}
@@ -717,31 +716,27 @@ body::after{
         <div class="sp-eyebrow">Текущий спринт</div>
         <div class="sp-num" id="sp-num-val">1 из 3</div>
         <div class="sp-dates" id="sp-dates">21 мая — 21 июня</div>
+        <div class="mission-row">
+          <div class="mission-check">✓</div>
+          <div class="mission-txt">
+            <strong id="mg-a">Фундамент: контент-машина</strong>
+            <span id="mg-b">+100 новых подписчиков</span>
+          </div>
+        </div>
       </div>
       <div class="ring-wrap">
-        <svg class="ring-svg" viewBox="0 0 120 120">
-          <circle class="ring-bg" cx="60" cy="60" r="48"/>
-          <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="48"/>
+        <svg class="ring-svg" viewBox="0 0 90 90">
+          <circle class="ring-bg" cx="45" cy="45" r="36"/>
+          <circle class="ring-fg" id="ring-fg" cx="45" cy="45" r="36"/>
         </svg>
         <div class="ring-center">
           <div class="ring-pct" id="ring-pct">0%</div>
-          <div class="ring-lbl">прогресс</div>
         </div>
-      </div>
-    </div>
-    <div class="mission-row">
-      <div class="mission-check">✓</div>
-      <div class="mission-txt">
-        <strong id="mg-a">Фундамент: контент-машина</strong>
-        <span id="mg-b">+100 новых подписчиков</span>
       </div>
     </div>
     <div class="sp-progress">
       <div class="sp-progress-track"><div class="sp-progress-fill" id="sp-progress-fill"></div></div>
-      <div class="sp-progress-meta">
-        <span id="hero-foot">0 активных дней</span>
-        <span>из 90 дней</span>
-      </div>
+      <div class="sp-progress-meta" id="hero-foot">0 из 3 задач завершено</div>
     </div>
   </div>
 
@@ -901,7 +896,7 @@ function renderDash(){
   const sp=getCurrentSprint();
   const start=new Date(sp.start),end=new Date(sp.end);
   const pct=Math.min(Math.round((new Date()-start)/(end-start)*100),100);
-  const circ=302;
+  const circ=226;
   const off=circ*(1-pct/100);
   const rf=document.getElementById('ring-fg');
   if(rf){rf.style.strokeDasharray=circ;rf.style.strokeDashoffset=off;}
@@ -912,13 +907,13 @@ function renderDash(){
   const sd=document.getElementById('sp-dates');if(sd)sd.textContent=sp.dates;
   const ga=document.getElementById('mg-a');if(ga)ga.textContent=parts[0].replace(':','').trim();
   const gb=document.getElementById('mg-b');if(gb)gb.textContent=parts[1]?'+'+parts[1].trim():'';
-  const done=Object.values(state.checks).filter(c=>c.post||c.gym).length;
-  const hf=document.getElementById('hero-foot');if(hf)hf.textContent=`${done} активных дней`;
-
   const m=state.metrics;
   const tgP=Math.max(0,Math.min(100,Math.round((m.tg_subs-298)/(1000-298)*100)));
   const smP=Math.max(0,Math.min(100,Math.round((5-(m.smoke||0))/5*100)));
   const ozP=Math.max(0,Math.min(100,Math.round((m.ozon_shifts||0)/15*100)));
+  const completedTasks=[tgP>=50?1:0,smP>=50?1:0,ozP>=50?1:0].reduce((a,b)=>a+b,0);
+  const hf=document.getElementById('hero-foot');if(hf)hf.textContent=`${completedTasks} из 3 задач завершено`;
+
   const overall=Math.round((tgP+smP+ozP+(m.camry?100:0))/4);
   const income=m.income||0;
 
