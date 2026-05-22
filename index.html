@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JAHONGIR OS</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --bg:#080b1a;--bg2:#0c1023;
+  --card:#0f1629;--card2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.07);
+  --blue:#4da8ff;--blue2:#1a5fff;
+  --green:#00e5a0;--green2:rgba(0,229,160,0.15);
+  --purple:#a855f7;--purple2:rgba(168,85,247,0.2);
+  --yellow:#f59e0b;--yellow2:rgba(245,158,11,0.2);
+  --red:#ff4d6d;
+  --text:#f0f4ff;--t2:rgba(240,244,255,0.55);--t3:rgba(240,244,255,0.28);
+  --r:18px;--rs:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;
+  font-size:14px;min-height:100vh;padding-bottom:90px;overflow-x:hidden;
+}
+.screen{display:none;}
+.screen.active{display:block;animation:fi .2s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ── TOP BAR ── */
+.topbar{display:flex;align-items:center;gap:12px;padding:18px 16px 10px;}
+.ava{
+  width:46px;height:46px;border-radius:50%;flex-shrink:0;overflow:hidden;
+  background:linear-gradient(135deg,#1a2a5e,#2a3a7e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  box-shadow:0 0 0 2.5px rgba(77,168,255,0.5),0 0 12px rgba(77,168,255,0.25);
+}
+.ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.tb-info{flex:1;}
+.tb-name{font-size:16px;font-weight:700;color:var(--text);}
+.tb-sub{font-size:11px;color:var(--t3);margin-top:2px;}
+.bell{
+  position:relative;width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.bell-dot{
+  position:absolute;top:7px;right:8px;width:7px;height:7px;
+  border-radius:50%;background:var(--red);border:1.5px solid var(--bg);
+}
+
+/* ── SPRINT HERO ── */
+.hero{
+  margin:6px 14px 14px;
+  background:linear-gradient(145deg,#0c1940 0%,#0a1230 100%);
+  border:1px solid rgba(77,168,255,0.18);
+  border-radius:var(--r);padding:18px 18px 14px;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(77,168,255,0.08) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.hero-left{flex:1;}
+.sp-num{
+  font-size:22px;font-weight:900;line-height:1.1;margin-bottom:4px;
+}
+.sp-num .sp-label{font-size:16px;font-weight:500;color:var(--t2);}
+.sp-num .sp-bold{color:var(--text);}
+.sp-dates{font-size:12px;color:var(--t2);margin-bottom:0;}
+
+/* ring */
+.ring-wrap{width:105px;height:105px;position:relative;flex-shrink:0;}
+.ring-svg{width:105px;height:105px;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.07);stroke-width:9;}
+.ring-fg{
+  fill:none;stroke:#00d4ff;stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:264;stroke-dashoffset:264;
+  transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+  filter:drop-shadow(0 0 6px #00d4ff) drop-shadow(0 0 14px rgba(0,212,255,.5));
+}
+.ring-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;
+}
+.ring-pct{font-size:22px;font-weight:900;color:#fff;line-height:1;}
+.ring-label{font-size:8px;color:var(--t3);letter-spacing:.5px;}
+
+.mission-row{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-top:14px;
+  background:rgba(255,255,255,0.05);border-radius:12px;padding:10px 12px;
+}
+.mission-check{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;margin-top:1px;
+  background:rgba(0,229,160,0.2);border:1px solid rgba(0,229,160,0.35);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--green);font-size:12px;font-weight:900;
+}
+.mission-txt{font-size:12px;color:var(--t2);line-height:1.4;}
+.mission-txt strong{color:var(--text);display:block;font-size:13px;margin-bottom:1px;}
+.hero-foot{
+  margin-top:10px;font-size:10px;color:var(--t3);
+  border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;
+}
+
+/* ── METRIC GRID ── */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 14px;}
+.mc{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px;
+}
+.mc-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.mc-ico{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.mc-ico.bl{background:rgba(77,168,255,0.2);}
+.mc-ico.gr{background:rgba(0,229,160,0.15);}
+.mc-ico.yl{background:rgba(245,158,11,0.2);}
+.mc-ico.pu{background:rgba(168,85,247,0.2);}
+.mc-ico svg{width:15px;height:15px;}
+.mc-lbl{font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--t3);text-transform:uppercase;}
+
+.mc-val{font-size:27px;font-weight:900;line-height:1;margin-bottom:3px;}
+.mc-val.green{color:var(--green);}
+.mc-sub{font-size:11px;color:var(--t3);margin-bottom:10px;}
+.mc-sub.green{color:var(--green);}
+.mc-bar-wrap{margin-top:auto;}
+.mc-bar{height:3px;background:rgba(255,255,255,0.07);border-radius:10px;overflow:hidden;}
+.mc-fill{height:100%;border-radius:10px;background:var(--green);transition:width .7s ease;}
+.mc-pct{font-size:10px;color:var(--t3);text-align:right;margin-top:5px;}
+
+/* goals ring in card */
+.mc-ring-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+.mini-ring{flex-shrink:0;}
+
+/* ── AI INSIGHT ── */
+.ai-bar{
+  margin:0 14px 14px;
+  background:linear-gradient(135deg,rgba(77,168,255,0.1),rgba(168,85,247,0.08));
+  border:1px solid rgba(77,168,255,0.18);
+  border-radius:var(--r);padding:13px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.ai-left{flex:1;}
+.ai-tag{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--blue);text-transform:uppercase;margin-bottom:4px;}
+.ai-txt{font-size:13px;color:var(--t2);}
+.ai-arr{font-size:13px;color:var(--blue);margin-left:4px;}
+.ai-bot{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#0a2a6e,#1a1a5e);
+  border:2px solid rgba(77,168,255,0.3);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  box-shadow:0 0 20px rgba(77,168,255,0.35),0 0 40px rgba(77,168,255,0.1);
+}
+
+/* ── SECTION ── */
+.sec-hdr{padding:14px 14px 8px;font-size:9px;font-weight:700;letter-spacing:1.4px;color:var(--t3);text-transform:uppercase;}
+
+/* ── METRIC INPUTS ── */
+.inp-rows{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;}
+.inp-row{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px 13px;
+}
+.inp-em{font-size:16px;flex-shrink:0;}
+.inp-lbl{flex:1;font-size:13px;color:var(--t2);}
+.inp-field{
+  width:72px;background:rgba(255,255,255,0.07);border:1px solid var(--border);
+  border-radius:9px;padding:6px 10px;color:var(--text);
+  font-size:15px;font-weight:700;text-align:right;outline:none;
+}
+.inp-field:focus{border-color:var(--blue);}
+.save-btn{
+  display:block;width:calc(100% - 28px);margin:0 14px 14px;
+  padding:14px;background:linear-gradient(135deg,var(--blue2),var(--purple));
+  border:none;border-radius:var(--r);color:#fff;font-size:14px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 20px rgba(77,168,255,0.3);
+}
+.save-btn:active{opacity:.85;}
+
+/* ── GOALS ── */
+.goal-row{
+  margin:0 14px 8px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--rs);padding:12px 13px;
+  display:flex;align-items:center;gap:12px;
+}
+.gi{font-size:22px;flex-shrink:0;}
+.g-info{flex:1;}
+.g-name{font-size:13px;font-weight:600;}
+.g-desc{font-size:10px;color:var(--t3);margin:2px 0 6px;}
+.g-pct{font-size:15px;font-weight:800;color:var(--blue);flex-shrink:0;}
+
+/* ── RULES ── */
+.rule-row{
+  margin:0 14px 8px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--rs);padding:12px 13px;display:flex;gap:12px;
+}
+.rn{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(77,168,255,0.15);color:var(--blue);
+  font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;
+}
+.rt{font-size:12px;color:var(--t2);line-height:1.5;}
+
+/* ── SCREEN HEADER ── */
+.shdr{padding:20px 14px 12px;display:flex;align-items:center;}
+.shdr-t{font-size:22px;font-weight:800;}
+
+/* ── CHECKLIST ── */
+.sp-div{margin:18px 14px 8px;display:flex;align-items:center;gap:10px;}
+.sp-div-t{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);white-space:nowrap;}
+.sp-div-l{flex:1;height:1px;background:rgba(255,255,255,0.05);}
+.day-card{
+  margin:0 14px 8px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:13px 14px;
+}
+.day-card.today{
+  background:linear-gradient(135deg,rgba(26,95,255,0.14),rgba(168,85,247,0.07));
+  border-color:rgba(77,168,255,0.3);
+}
+.day-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.day-lbl{font-size:13px;font-weight:700;}
+.day-dt{font-size:10px;color:var(--t3);margin-top:2px;}
+.dchip{font-size:8px;font-weight:700;padding:3px 9px;border-radius:8px;letter-spacing:.5px;}
+.dchip.work{background:rgba(77,168,255,0.15);color:var(--blue);}
+.dchip.ozon{background:rgba(245,158,11,0.15);color:var(--yellow);}
+.dchip.rest{background:rgba(0,229,160,0.12);color:var(--green);}
+.checks{display:flex;gap:7px;}
+.chk{
+  flex:1;display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:10px;padding:8px 10px;cursor:pointer;transition:all .15s;
+}
+.chk.done{background:rgba(0,229,160,0.1);border-color:rgba(0,229,160,0.25);}
+.chk-dot{
+  width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;
+}
+.chk.done .chk-dot{background:var(--green);border-color:var(--green);color:#000;}
+.chk-l{font-size:10px;font-weight:600;color:var(--t2);}
+.chk.done .chk-l{color:var(--green);}
+.ozon-msg{font-size:11px;color:var(--t3);padding:2px 0;}
+
+/* ── SCHEDULE ── */
+.stabs{display:flex;gap:7px;padding:0 14px 14px;overflow-x:auto;scrollbar-width:none;}
+.stab{
+  padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;
+  border:1px solid var(--border);background:transparent;color:var(--t3);
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+}
+.stab.active{background:var(--blue2);border-color:var(--blue2);color:#fff;}
+.spanel{display:none;padding:0 14px;}
+.spanel.active{display:block;}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
+.scard-hdr{padding:11px 14px;font-size:11px;font-weight:700;color:var(--t2);border-bottom:1px solid var(--border);}
+.trow{display:flex;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.trow:last-child{border-bottom:none;}
+.tchip{font-size:10px;font-weight:700;color:var(--blue);white-space:nowrap;min-width:90px;padding-top:1px;}
+.ttxt{font-size:12px;color:var(--t2);line-height:1.4;}
+.wcard{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.wcard:last-child{border-bottom:none;}
+.wday{font-size:12px;font-weight:700;margin-bottom:2px;}
+.wtype{font-size:9px;font-weight:700;color:var(--blue);letter-spacing:1px;margin-bottom:4px;}
+.wdesc{font-size:11px;color:var(--t3);line-height:1.4;}
+.srow{display:flex;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:flex-start;}
+.srow:last-child{border-bottom:none;}
+.speriod{font-size:11px;font-weight:700;color:var(--purple);min-width:72px;}
+.srule{font-size:11px;color:var(--t3);line-height:1.4;}
+.warn-c{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--t2);}
+.warn-c strong{color:var(--yellow);display:block;margin-bottom:3px;}
+
+/* ── CONTENT ── */
+.pipeline{display:flex;align-items:center;gap:4px;padding:0 14px 16px;overflow-x:auto;scrollbar-width:none;}
+.ps{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;min-width:56px;}
+.pc{
+  width:46px;height:46px;border-radius:50%;background:var(--card);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;
+}
+.pb{
+  position:absolute;top:-4px;right:-4px;background:var(--blue);color:#fff;
+  font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);
+}
+.pb.g{background:var(--green);color:#000;}
+.pb.p{background:var(--purple);}
+.pb.y{background:var(--yellow);color:#000;}
+.pl{font-size:9px;font-weight:700;color:var(--t3);text-align:center;}
+.parr{font-size:11px;color:var(--t3);flex-shrink:0;padding-bottom:18px;}
+
+.whdr{margin:12px 14px 8px;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.whdr::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.05);}
+.post-c{margin:0 14px 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:13px 14px;}
+.post-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px;}
+.post-t{font-size:13px;font-weight:600;flex:1;line-height:1.35;}
+.schip{font-size:8px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;flex-shrink:0;cursor:pointer;}
+.si{background:rgba(245,158,11,0.2);color:var(--yellow);}
+.sr{background:rgba(77,168,255,0.15);color:var(--blue);}
+.sd{background:rgba(0,229,160,0.12);color:var(--green);}
+.post-meta{display:flex;gap:7px;}
+.pfmt{font-size:10px;color:var(--t3);background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:6px;}
+.pdate{font-size:10px;color:var(--t3);}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(8,11,26,0.94);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-top:1px solid rgba(255,255,255,0.07);
+  display:flex;align-items:center;
+  padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+  z-index:100;gap:4px;
+}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:8px 6px;border:none;background:none;
+  color:var(--t3);font-size:10px;font-weight:600;letter-spacing:.2px;
+  border-radius:14px;cursor:pointer;transition:all .2s;
+}
+.nb.active{color:#fff;background:rgba(77,168,255,0.1);}
+.nb.active svg{filter:drop-shadow(0 0 6px rgba(77,168,255,.7));}
+.nb svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.7;}
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <linearGradient id="gr1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4da8ff"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+    <linearGradient id="gr2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.25)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ══════════ SCREEN: DASH ══════════ -->
+<div class="screen active" id="screen-dash">
+
+  <div class="topbar">
+    <div class="ava" id="ava-wrap">Д</div>
+    <div class="tb-info">
+      <div class="tb-name">Привет, Джахангир 👋</div>
+      <div class="tb-sub">Фокус на цели. Система работает.</div>
+    </div>
+    <div class="bell">
+      🔔
+      <div class="bell-dot"></div>
+    </div>
+  </div>
+
+  <!-- Sprint Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-left">
+        <div class="sp-num">
+          <span class="sp-label">СПРИНТ </span><span class="sp-bold" id="sp-num-val">1 из 3</span>
+        </div>
+        <div class="sp-dates" id="sp-dates">21 мая — 21 июня</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 105 105">
+          <circle class="ring-bg" cx="52.5" cy="52.5" r="42"/>
+          <circle class="ring-fg" id="ring-fg" cx="52.5" cy="52.5" r="42"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-pct" id="ring-pct">0%</div>
+        </div>
+      </div>
+    </div>
+    <div class="mission-row">
+      <div class="mission-check">✓</div>
+      <div class="mission-txt">
+        <strong id="mg-a">Фундамент: контент-машина</strong>
+        <span id="mg-b">+100 новых подписчиков</span>
+      </div>
+    </div>
+    <div class="hero-foot" id="hero-foot">0 активных дней из 90</div>
+  </div>
+
+  <!-- Metrics 2x2 -->
+  <div class="mgrid" id="mgrid"></div>
+
+  <!-- AI Insight -->
+  <div class="ai-bar">
+    <div class="ai-left">
+      <div class="ai-tag">AI Insight</div>
+      <div class="ai-txt">Лучшее время для поста: <strong style="color:#fff">21:30</strong><span class="ai-arr"> →</span></div>
+    </div>
+    <div class="ai-bot">🤖</div>
+  </div>
+
+  <!-- Update metrics -->
+  <div class="sec-hdr">Обновить метрики</div>
+  <div class="inp-rows">
+    <div class="inp-row">
+      <span class="inp-em">📢</span><span class="inp-lbl">Подписчики TG</span>
+      <input class="inp-field" id="inp-tg" type="number" min="0" max="9999">
+    </div>
+    <div class="inp-row">
+      <span class="inp-em">🚬</span><span class="inp-lbl">Сигарет в день</span>
+      <input class="inp-field" id="inp-smoke" type="number" min="0" max="40">
+    </div>
+    <div class="inp-row">
+      <span class="inp-em">💰</span><span class="inp-lbl">Смены Озон</span>
+      <input class="inp-field" id="inp-ozon" type="number" min="0" max="31">
+    </div>
+    <div class="inp-row">
+      <span class="inp-em">💵</span><span class="inp-lbl">Доход этого месяца (₽)</span>
+      <input class="inp-field" id="inp-income" type="number" min="0" max="999999">
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveMetrics()">💾 Сохранить прогресс</button>
+
+  <div class="sec-hdr">Цели 2026</div>
+  <div id="goals-list"></div>
+
+  <div class="sec-hdr">Правила системы</div>
+  <div id="rules-list"></div>
+</div>
+
+<!-- ══════════ SCREEN: CHECK ══════════ -->
+<div class="screen" id="screen-check">
+  <div class="shdr"><div class="shdr-t">Привычки</div></div>
+  <div id="checklist-body"></div>
+</div>
+
+<!-- ══════════ SCREEN: SCHEDULE ══════════ -->
+<div class="screen" id="screen-schedule">
+  <div class="shdr"><div class="shdr-t">Расписание</div></div>
+  <div class="stabs">
+    <button class="stab active" onclick="switchSTab('work',this)">🟢 Рабочий день</button>
+    <button class="stab" onclick="switchSTab('ozon',this)">🔵 День Озон</button>
+    <button class="stab" onclick="switchSTab('fit',this)">🏋 Фитнес</button>
+  </div>
+  <div class="spanel active" id="spanel-work"></div>
+  <div class="spanel" id="spanel-ozon"></div>
+  <div class="spanel" id="spanel-fit"></div>
+</div>
+
+<!-- ══════════ SCREEN: CONTENT ══════════ -->
+<div class="screen" id="screen-content">
+  <div class="shdr"><div class="shdr-t">Контент</div></div>
+  <div class="pipeline" id="pipeline"></div>
+  <div id="content-body"></div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="nav">
+  <button class="nb active" onclick="switchScreen('dash',this)">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    Главная
+  </button>
+  <button class="nb" onclick="switchScreen('check',this)">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Привычки
+  </button>
+  <button class="nb" onclick="switchScreen('schedule',this)">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+    Режим
+  </button>
+  <button class="nb" onclick="switchScreen('content',this)">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></svg>
+    Контент
+  </button>
+</nav>
+
+<script>
+const GOALS=[{icon:'📢',name:'Telegram @moneyflipflap',desc:'298 → 1 000 подписчиков',key:'tg_subs'},{icon:'💪',name:'Здоровье',desc:'Бросить курить + тренировки 3×/нед',key:'smoke'},{icon:'💰',name:'Смены Озон',desc:'15 смен/мес = ~37 500 руб/мес',key:'ozon_shifts'},{icon:'🚗',name:'Продать Камри',desc:'2 150 000 → закрыть долги',key:'camry'}];
+const SPRINTS=[{num:1,dates:'21 мая — 21 июня',goal:'Фундамент: контент-машина +100 новых подписчиков',start:'2026-05-21',end:'2026-06-21'},{num:2,dates:'21 июня — 21 июля',goal:'Коллаборации: взаимный пиар +300 подписчиков',start:'2026-06-21',end:'2026-07-21'},{num:3,dates:'21 июля — 21 авг',goal:'Монетизация: 1 000 подп + закрытый канал',start:'2026-07-21',end:'2026-08-21'}];
+const RULES=['Один канал — «Дневник Флиппера». Instagram и AI-блог — в стоп-лист до 21 августа.','1 пост в день = день засчитан. Больше — бонус. Меньше — не наказывай себя.','День со сменой Озон = отдых. Канал не трогаешь.','Каждое воскресенье — 10 мин на обновление прогресса.'];
+const DAYS=[{date:'21.05.26',day:'Чт 1',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'22.05.26',day:'Пт 2',type:'work',task:'Пост: новость рынка + мой взгляд'},{date:'23.05.26',day:'Сб 3',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'24.05.26',day:'Вс 4',type:'rest',task:'Планирование недели + итоги'},{date:'25.05.26',day:'Пн 5',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'26.05.26',day:'Вт 6',type:'work',task:'Пост: кейс из личного опыта'},{date:'27.05.26',day:'Ср 7',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'28.05.26',day:'Чт 8',type:'work',task:'Пост: разбор P2P-связки'},{date:'29.05.26',day:'Пт 9',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'30.05.26',day:'Сб 10',type:'work',task:'Пост: итоги недели + цифры'},{date:'31.05.26',day:'Вс 11',type:'rest',task:'Планирование недели + итоги'},{date:'01.06.26',day:'Пн 12',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'02.06.26',day:'Вт 13',type:'work',task:'Пост: кейс из личного опыта'},{date:'03.06.26',day:'Ср 14',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'04.06.26',day:'Чт 15',type:'work',task:'Пост: разбор P2P-связки'},{date:'05.06.26',day:'Пт 16',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'06.06.26',day:'Сб 17',type:'work',task:'Пост: итоги недели + цифры'},{date:'07.06.26',day:'Вс 18',type:'rest',task:'Планирование недели + итоги'},{date:'08.06.26',day:'Пн 19',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'09.06.26',day:'Вт 20',type:'work',task:'Пост: кейс из личного опыта'},{date:'10.06.26',day:'Ср 21',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'11.06.26',day:'Чт 22',type:'work',task:'Пост: разбор P2P-связки'},{date:'12.06.26',day:'Пт 23',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'13.06.26',day:'Сб 24',type:'work',task:'Пост: итоги недели + цифры'},{date:'14.06.26',day:'Вс 25',type:'rest',task:'Планирование недели + итоги'},{date:'15.06.26',day:'Пн 26',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'16.06.26',day:'Вт 27',type:'work',task:'Пост: кейс из личного опыта'},{date:'17.06.26',day:'Ср 28',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'18.06.26',day:'Чт 29',type:'work',task:'Пост: разбор P2P-связки'},{date:'19.06.26',day:'Пт 30',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'20.06.26',day:'Сб 31',type:'work',task:'Пост: итоги недели + цифры'},{date:'21.06.26',day:'Вс 32',type:'rest',task:'Планирование недели + итоги'},{date:'22.06.26',day:'Пн 33',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'23.06.26',day:'Вт 34',type:'work',task:'Пост: кейс из личного опыта'},{date:'24.06.26',day:'Ср 35',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'25.06.26',day:'Чт 36',type:'work',task:'Пост: разбор P2P-связки'},{date:'26.06.26',day:'Пт 37',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'27.06.26',day:'Сб 38',type:'work',task:'Пост: итоги недели + цифры'},{date:'28.06.26',day:'Вс 39',type:'rest',task:'Планирование недели + итоги'},{date:'29.06.26',day:'Пн 40',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'30.06.26',day:'Вт 41',type:'work',task:'Пост: кейс из личного опыта'},{date:'01.07.26',day:'Ср 42',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'02.07.26',day:'Чт 43',type:'work',task:'Пост: разбор P2P-связки'},{date:'03.07.26',day:'Пт 44',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'04.07.26',day:'Сб 45',type:'work',task:'Пост: итоги недели + цифры'},{date:'05.07.26',day:'Вс 46',type:'rest',task:'Планирование недели + итоги'},{date:'06.07.26',day:'Пн 47',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'07.07.26',day:'Вт 48',type:'work',task:'Пост: кейс из личного опыта'},{date:'08.07.26',day:'Ср 49',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'09.07.26',day:'Чт 50',type:'work',task:'Пост: разбор P2P-связки'},{date:'10.07.26',day:'Пт 51',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'11.07.26',day:'Сб 52',type:'work',task:'Пост: итоги недели + цифры'},{date:'12.07.26',day:'Вс 53',type:'rest',task:'Планирование недели + итоги'},{date:'13.07.26',day:'Пн 54',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'14.07.26',day:'Вт 55',type:'work',task:'Пост: кейс из личного опыта'},{date:'15.07.26',day:'Ср 56',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'16.07.26',day:'Чт 57',type:'work',task:'Пост: разбор P2P-связки'},{date:'17.07.26',day:'Пт 58',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'18.07.26',day:'Сб 59',type:'work',task:'Пост: итоги недели + цифры'},{date:'19.07.26',day:'Вс 60',type:'rest',task:'Планирование недели + итоги'},{date:'20.07.26',day:'Пн 61',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'21.07.26',day:'Вт 62',type:'work',task:'Пост: кейс из личного опыта'},{date:'22.07.26',day:'Ср 63',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'23.07.26',day:'Чт 64',type:'work',task:'Пост: разбор P2P-связки'},{date:'24.07.26',day:'Пт 65',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'25.07.26',day:'Сб 66',type:'work',task:'Пост: итоги недели + цифры'},{date:'26.07.26',day:'Вс 67',type:'rest',task:'Планирование недели + итоги'},{date:'27.07.26',day:'Пн 68',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'28.07.26',day:'Вт 69',type:'work',task:'Пост: кейс из личного опыта'},{date:'29.07.26',day:'Ср 70',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'30.07.26',day:'Чт 71',type:'work',task:'Пост: разбор P2P-связки'},{date:'31.07.26',day:'Пт 72',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'01.08.26',day:'Сб 73',type:'work',task:'Пост: итоги недели + цифры'},{date:'02.08.26',day:'Вс 74',type:'rest',task:'Планирование недели + итоги'},{date:'03.08.26',day:'Пн 75',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'04.08.26',day:'Вт 76',type:'work',task:'Пост: кейс из личного опыта'},{date:'05.08.26',day:'Ср 77',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'06.08.26',day:'Чт 78',type:'work',task:'Пост: разбор P2P-связки'},{date:'07.08.26',day:'Пт 79',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'08.08.26',day:'Сб 80',type:'work',task:'Пост: итоги недели + цифры'},{date:'09.08.26',day:'Вс 81',type:'rest',task:'Планирование недели + итоги'},{date:'10.08.26',day:'Пн 82',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'11.08.26',day:'Вт 83',type:'work',task:'Пост: кейс из личного опыта'},{date:'12.08.26',day:'Ср 84',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'13.08.26',day:'Чт 85',type:'work',task:'Пост: разбор P2P-связки'},{date:'14.08.26',day:'Пт 86',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'15.08.26',day:'Сб 87',type:'work',task:'Пост: итоги недели + цифры'},{date:'16.08.26',day:'Вс 88',type:'rest',task:'Планирование недели + итоги'},{date:'17.08.26',day:'Пн 89',type:'ozon',task:'Смена 12ч — отдыхай после работы'},{date:'18.08.26',day:'Вт 90',type:'work',task:'Пост: разбор P2P-связки'}];
+const SPRINT_DIV={0:'СПРИНТ 1 · ФУНДАМЕНТ',31:'СПРИНТ 2 · КОЛЛАБОРАЦИИ',62:'СПРИНТ 3 · МОНЕТИЗАЦИЯ'};
+const SW=[{time:'07:00–07:30',text:'Подъём, дети, завтрак'},{time:'07:30–08:00',text:'10 мин спорт + холодный душ'},{time:'08:00–09:30',text:'🔥 Написать и запостить пост в TG-канал'},{time:'09:30–10:00',text:'💬 Комментинг в 10–15 крипто-каналах'},{time:'10:00–13:00',text:'Семья, дела, отдых'},{time:'13:00–14:00',text:'📚 Изучение крипто-темы для следующего поста'},{time:'14:00–18:00',text:'Свободное время / семья'},{time:'18:00–18:40',text:'🏋 Тренировка (3× в неделю: Пн/Ср/Пт)'},{time:'20:00–21:00',text:'📝 Подготовка контента на завтра'},{time:'22:00',text:'Сон'}];
+const SO=[{time:'06:00–06:30',text:'Подъём, быстрый завтрак'},{time:'06:30–07:00',text:'Дорога на смену'},{time:'07:00–19:00',text:'🔵 СМЕНА ОЗОН — 12 часов'},{time:'19:00–20:00',text:'Дорога домой + ужин'},{time:'20:00–21:00',text:'Семья, дети — ТОЛЬКО семья'},{time:'21:00–22:00',text:'Отдых, сериал, ничего не делать'},{time:'22:00',text:'Сон — канал не трогаем'}];
+const WO=[{day:'Понедельник 🏋',type:'ВЕРХ',desc:'Отжимания 4×15, подтягивания 3×max, трицепс 3×12, планка 3×45 сек'},{day:'Среда 🦵',type:'НИЗ + КОРПУС',desc:'Приседания 4×20, выпады 3×15, подъём ног 3×15, скручивания 3×20'},{day:'Пятница 🔄',type:'КАРДИО + СПИНА',desc:'Берпи 3×10, тяга резинки 3×15, гиперэкстензия 3×15, прыжки 3 мин'}];
+const SMOKE=[{period:'Нед. 1–2',rule:'Максимум 2 сигареты в день. Снижение — не ноль.'},{period:'Нед. 3–4',rule:'Максимум 1 сигарета в день. Только после еды.'},{period:'Нед. 5–6',rule:'Через день. Потом — только в выходной.'},{period:'С 01.07',rule:'Ноль. Тело уже привыкнет к минимуму.'},{period:'Лайфхак',rule:'Жвачка / орехи / стакан воды. Стресс → 10 отжиманий.'}];
+const POSTS=[{week:'НЕДЕЛЯ 1 — с 21.05',items:[{date:'22.05',format:'Личная история',title:'Как я потерял всё на крипте и что делаю сейчас'},{date:'26.05',format:'Схема',title:'P2P-арбитраж: схема заработка без риска ликвидации'},{date:'28.05',format:'Обзор',title:'Топ-5 airdrop этой недели — сколько реально заработать'},{date:'30.05',format:'Кейс',title:'Флиппинг TG-каналов: купил за 5к продал за 30к'},{date:'02.06',format:'Итоги',title:'Итоги недели: сколько заработал, что пошло не так'}]},{week:'НЕДЕЛЯ 2 — с 03.06',items:[{date:'04.06',format:'Схема',title:'Как торговать крипту с флагом по 161-ФЗ — реальные способы'},{date:'06.06',format:'Разбор',title:'Разбираю Bybit Earn: пассивный доход без трейдинга'},{date:'09.06',format:'Обзор',title:'3 крипто-кошелька которые я использую и почему'},{date:'11.06',format:'Кейс',title:'Реферальная программа Bybit: $800–1200/мес'},{date:'13.06',format:'Итоги',title:'Воскресный отчёт: прогресс канала, цифры'}]},{week:'НЕДЕЛЯ 3 — с 14.06',items:[{date:'16.06',format:'Схема',title:'Copy-trading: как копировать сделки топовых трейдеров'},{date:'18.06',format:'Личная история',title:'Почему я вышел из всех позиций'},{date:'20.06',format:'Обзор',title:'Airdrop: Tier-1 проекты с деньгами'},{date:'23.06',format:'Разбор',title:'Grid-бот на Bybit: настройка за 10 минут'},{date:'25.06',format:'Итоги',title:'Итоги + анонс закрытого канала'}]},{week:'НЕДЕЛЯ 4 — с 26.06',items:[{date:'27.06',format:'Схема',title:'P2P без банков: крипто-карты'},{date:'30.06',format:'Кейс',title:'500$ за неделю на арбитраже без стресса'},{date:'02.07',format:'Схема',title:'Монетизация TG: 5 способов на 1000 подписчиков'},{date:'04.07',format:'Разбор',title:'Налоги с крипты в России 2026'},{date:'07.07',format:'Итоги',title:'Месяц: итоги спринта №1, цифры, планы'}]},{week:'НЕДЕЛЯ 5 — с 08.07',items:[{date:'09.07',format:'Коллаб',title:'Взаимный пиар с каналом'},{date:'11.07',format:'Схема',title:'Launchpad на Bybit: участие и заработок'},{date:'14.07',format:'Обзор',title:'Топ ошибок P2P-трейдеров'},{date:'16.07',format:'Кейс',title:'30 дней — +200 подписчиков. Вот как'},{date:'18.07',format:'Итоги',title:'Воскресный отчёт'}]},{week:'НЕДЕЛЯ 6 — с 19.07',items:[{date:'21.07',format:'Схема',title:'Арбитраж стейблкоинов USDT/USDC'},{date:'23.07',format:'Личная история',title:'Как продаю машину — честно'},{date:'25.07',format:'Обзор',title:'Лучшие DEX для арбитража 2026'},{date:'28.07',format:'Разбор',title:'Фьючерсы vs Спот'},{date:'30.07',format:'Итоги',title:'Итоги недели'}]},{week:'НЕДЕЛЯ 7 — с 31.07',items:[{date:'01.08',format:'Коллаб',title:'Взаимный пиар #2'},{date:'04.08',format:'Схема',title:'Крипто-сигналы: почему 90% — обман'},{date:'06.08',format:'Кейс',title:'Пассивный доход на стейкинге'},{date:'08.08',format:'Разбор',title:'On-chain аналитика для новичков'},{date:'11.08',format:'Итоги',title:'Воскресный отчёт'}]},{week:'НЕДЕЛЯ 8 — с 12.08',items:[{date:'13.08',format:'Схема',title:'Как находить схемы до мейнстрима'},{date:'15.08',format:'Личная история',title:'2 месяца без потерь — вот моя система'},{date:'18.08',format:'Обзор',title:'Airdrop недели'}]}];
+
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+// Load avatar photo
+(function(){
+  const ava=document.getElementById('ava-wrap');
+  if(!ava)return;
+  const img=new Image();
+  img.onload=function(){ava.innerHTML='';ava.style.padding='0';ava.appendChild(img);}
+  img.onerror=function(){}; // keep letter fallback
+  img.src='./avatar.webp';
+  img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';
+})();
+let state={checks:{},metrics:{tg_subs:298,smoke:5,ozon_shifts:0,camry:0,income:0},postStatus:{}};
+
+function loadState(){
+  try{const s=localStorage.getItem('plan_v4');if(s)Object.assign(state,JSON.parse(s));}catch(e){}
+  render();
+  if(tg?.CloudStorage){
+    tg.CloudStorage.getItem('plan_v4',function(e,v){
+      if(!e&&v){try{Object.assign(state,JSON.parse(v));render();}catch(x){}}
+    });
+  }
+}
+function saveState(){
+  const j=JSON.stringify(state);
+  try{localStorage.setItem('plan_v4',j);}catch(e){}
+  if(tg?.CloudStorage)tg.CloudStorage.setItem('plan_v4',j);
+}
+function getCurrentSprint(){
+  const now=new Date();
+  for(const s of SPRINTS){if(now>=new Date(s.start)&&now<=new Date(s.end))return s;}
+  return SPRINTS[SPRINTS.length-1];
+}
+function todayKey(){
+  const d=new Date();
+  return`${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear()).slice(2)}`;
+}
+function fmtNum(n){return n.toLocaleString('ru');}
+function miniRing(pct,size=44,sw=4){
+  const r=(size-sw)/2,c=2*Math.PI*r;
+  const off=c*(1-pct/100);
+  return`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg);flex-shrink:0">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="${sw}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="${sw}"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function renderDash(){
+  const sp=getCurrentSprint();
+  const start=new Date(sp.start),end=new Date(sp.end);
+  const pct=Math.min(Math.round((new Date()-start)/(end-start)*100),100);
+  const circ=264;
+  const off=circ*(1-pct/100);
+  const rf=document.getElementById('ring-fg');
+  if(rf){rf.style.strokeDasharray=circ;rf.style.strokeDashoffset=off;}
+  const rp=document.getElementById('ring-pct');if(rp)rp.textContent=pct+'%';
+  const parts=sp.goal.split('+');
+  const nv=document.getElementById('sp-num-val');if(nv)nv.textContent=sp.num+' из 3';
+  const sd=document.getElementById('sp-dates');if(sd)sd.textContent=sp.dates;
+  const ga=document.getElementById('mg-a');if(ga)ga.textContent=parts[0].replace(':','').trim();
+  const gb=document.getElementById('mg-b');if(gb)gb.textContent=parts[1]?'+'+parts[1].trim():'';
+  const done=Object.values(state.checks).filter(c=>c.post||c.gym).length;
+  const hf=document.getElementById('hero-foot');if(hf)hf.textContent=`${done} из ${DAYS.length} дней активны`;
+
+  const m=state.metrics;
+  const tgP=Math.max(0,Math.min(100,Math.round((m.tg_subs-298)/(1000-298)*100)));
+  const smP=Math.max(0,Math.min(100,Math.round((5-(m.smoke||0))/5*100)));
+  const ozP=Math.max(0,Math.min(100,Math.round((m.ozon_shifts||0)/15*100)));
+  const overall=Math.round((tgP+smP+ozP+(m.camry?100:0))/4);
+  const income=m.income||0;
+
+  const tgIcon=`<svg viewBox="0 0 24 24" fill="white" width="15" height="15"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`;
+  const cigIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="#00e5a0" stroke-width="2" width="15" height="15"><path d="M3 12h14M19 9v6"/><path d="M21 8v8"/></svg>`;
+  const dolIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" width="15" height="15"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`;
+  const tgtIcon=`<svg viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="#c084fc"/></svg>`;
+
+  const activeGoals=[tgP>0,smP>0,ozP>0,m.camry?true:false].filter(Boolean).length;
+
+  const mg=document.getElementById('mgrid');
+  if(mg)mg.innerHTML=`
+    <div class="mc">
+      <div class="mc-hdr"><div class="mc-ico bl">${tgIcon}</div><span class="mc-lbl">Подписчики</span></div>
+      <div class="mc-val">${fmtNum(m.tg_subs)}</div>
+      <div class="mc-sub">из 1 000</div>
+      <div class="mc-bar"><div class="mc-fill" style="width:${tgP}%"></div></div>
+      <div class="mc-pct">${tgP}%</div>
+    </div>
+    <div class="mc">
+      <div class="mc-hdr"><div class="mc-ico gr">${cigIcon}</div><span class="mc-lbl">Сигареты</span></div>
+      <div class="mc-val">${m.smoke||0}</div>
+      <div class="mc-sub">в день</div>
+      <div class="mc-bar"><div class="mc-fill" style="width:${smP}%"></div></div>
+      <div class="mc-pct">${smP}%</div>
+    </div>
+    <div class="mc">
+      <div class="mc-hdr"><div class="mc-ico yl">${dolIcon}</div><span class="mc-lbl">Доход</span></div>
+      <div class="mc-val green">${income>0?fmtNum(income)+' ₽':'0 ₽'}</div>
+      <div class="mc-sub green">+цель: 37 500 ₽</div>
+    </div>
+    <div class="mc">
+      <div class="mc-hdr"><div class="mc-ico pu">${tgtIcon}</div><span class="mc-lbl">Цели 2026</span></div>
+      <div class="mc-ring-row">
+        <div>
+          <div class="mc-val">${overall}%</div>
+          <div class="mc-sub">${activeGoals} цели активны</div>
+        </div>
+        ${miniRing(overall,46,5)}
+      </div>
+    </div>`;
+
+  const ti=document.getElementById('inp-tg');if(ti)ti.value=m.tg_subs;
+  const si=document.getElementById('inp-smoke');if(si)si.value=m.smoke||0;
+  const oi=document.getElementById('inp-ozon');if(oi)oi.value=m.ozon_shifts||0;
+  const ii=document.getElementById('inp-income');if(ii)ii.value=income||'';
+
+  const gl=document.getElementById('goals-list');
+  if(gl)gl.innerHTML=GOALS.map(g=>{
+    let p=0,cls='';
+    if(g.key==='tg_subs'){p=tgP;}
+    else if(g.key==='smoke'){p=smP;cls='g';}
+    else if(g.key==='ozon_shifts'){p=ozP;cls='y';}
+    else if(g.key==='camry'){p=m.camry?100:0;}
+    return`<div class="goal-row"><div class="gi">${g.icon}</div><div class="g-info"><div class="g-name">${g.name}</div><div class="g-desc">${g.desc}</div><div class="mc-bar"><div class="mc-fill ${cls}" style="width:${p}%"></div></div></div><div class="g-pct">${p}%</div></div>`;
+  }).join('');
+
+  const rl=document.getElementById('rules-list');
+  if(rl)rl.innerHTML=RULES.map((r,i)=>`<div class="rule-row"><div class="rn">${i+1}</div><div class="rt">${r}</div></div>`).join('');
+}
+
+function saveMetrics(){
+  const m=state.metrics;
+  m.tg_subs=parseInt(document.getElementById('inp-tg')?.value)||m.tg_subs;
+  m.smoke=parseInt(document.getElementById('inp-smoke')?.value)||0;
+  m.ozon_shifts=parseInt(document.getElementById('inp-ozon')?.value)||0;
+  m.income=parseInt(document.getElementById('inp-income')?.value)||0;
+  saveState();renderDash();
+  if(tg)tg.HapticFeedback?.notificationOccurred('success');
+}
+
+function renderChecklist(){
+  const today=todayKey();
+  let html='';
+  DAYS.forEach((d,i)=>{
+    if(SPRINT_DIV[i]!==undefined)
+      html+=`<div class="sp-div"><span class="sp-div-t">${SPRINT_DIV[i]}</span><div class="sp-div-l"></div></div>`;
+    const isT=d.date===today,c=state.checks[i]||{};
+    const body=d.type!=='ozon'
+      ?`<div class="checks">
+          <div class="chk ${c.post?'done':''}" onclick="toggleCheck(${i},'post')"><div class="chk-dot">${c.post?'✓':''}</div><span class="chk-l">📝 Пост</span></div>
+          <div class="chk ${c.gym?'done':''}" onclick="toggleCheck(${i},'gym')"><div class="chk-dot">${c.gym?'✓':''}</div><span class="chk-l">🏋 Зал</span></div>
+          <div class="chk ${c.sm?'done':''}" onclick="toggleCheck(${i},'sm')"><div class="chk-dot">${c.sm?'✓':''}</div><span class="chk-l">🚭 Режим</span></div>
+        </div>`
+      :`<div class="ozon-msg">⚡ Смена 12ч — отдыхай, канал не трогаешь</div>`;
+    html+=`<div class="day-card${isT?' today':''}"${isT?' id="today-card"':''}>
+      <div class="day-top">
+        <div><div class="day-lbl">${d.day}</div><div class="day-dt">${d.date}</div></div>
+        <div class="dchip ${d.type}">${d.type==='work'?'РАБОТА':d.type==='ozon'?'ОЗОН':'ОТДЫХ'}</div>
+      </div>${body}</div>`;
+  });
+  const el=document.getElementById('checklist-body');
+  if(el){el.innerHTML=html;setTimeout(()=>{const t=document.getElementById('today-card');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});},200);}
+}
+function toggleCheck(i,f){
+  if(!state.checks[i])state.checks[i]={};
+  state.checks[i][f]=!state.checks[i][f];
+  saveState();renderChecklist();
+  if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+
+function renderSchedule(){
+  document.getElementById('spanel-work').innerHTML=`<div class="scard"><div class="scard-hdr">🟢 Рабочий день</div>${SW.map(r=>`<div class="trow"><div class="tchip">${r.time}</div><div class="ttxt">${r.text}</div></div>`).join('')}</div>`;
+  document.getElementById('spanel-ozon').innerHTML=`<div class="scard"><div class="scard-hdr">🔵 День со сменой Озон</div>${SO.map(r=>`<div class="trow"><div class="tchip">${r.time}</div><div class="ttxt">${r.text}</div></div>`).join('')}</div><div class="warn-c"><strong>⚡ В день смены канал не трогаешь.</strong>Это закон системы. Иначе выгоришь за 2 недели.</div>`;
+  document.getElementById('spanel-fit').innerHTML=`<div class="scard"><div class="scard-hdr">🏋 Тренировки · Пн/Ср/Пт</div>${WO.map(w=>`<div class="wcard"><div class="wday">${w.day}</div><div class="wtype">${w.type}</div><div class="wdesc">${w.desc}</div></div>`).join('')}</div><div class="scard"><div class="scard-hdr">🚬 Протокол отказа</div>${SMOKE.map(s=>`<div class="srow"><div class="speriod">${s.period}</div><div class="srule">${s.rule}</div></div>`).join('')}</div>`;
+}
+function switchSTab(n,el){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('spanel-'+n).classList.add('active');
+}
+
+function renderContent(){
+  const m=state.metrics;
+  const s=['📝 Идея','✍️ Готовится','✅ Опубликован'],c=['si','sr','sd'];
+  const idea=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===0).length,0);
+  const ready=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===1).length,0);
+  const done=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===2).length,0);
+  const pf=document.getElementById('pipeline');
+  if(pf)pf.innerHTML=`
+    <div class="ps"><div class="pc">💡<span class="pb">${idea}</span></div><div class="pl">Идеи</div></div>
+    <div class="parr">→</div>
+    <div class="ps"><div class="pc">📝<span class="pb" style="background:var(--blue)">${ready}</span></div><div class="pl">Сценарий</div></div>
+    <div class="parr">→</div>
+    <div class="ps"><div class="pc">✂️<span class="pb p">0</span></div><div class="pl">Монтаж</div></div>
+    <div class="parr">→</div>
+    <div class="ps"><div class="pc">📤<span class="pb y">0</span></div><div class="pl">Постинг</div></div>
+    <div class="parr">→</div>
+    <div class="ps"><div class="pc">📊<span class="pb g">${m.tg_subs}</span></div><div class="pl">Аналитика</div></div>`;
+  let html='';
+  POSTS.forEach(week=>{
+    html+=`<div class="whdr">${week.week}</div>`;
+    week.items.forEach((p,pi)=>{
+      const key=week.week+'_'+pi,si=state.postStatus[key]||0;
+      html+=`<div class="post-c"><div class="post-top"><div class="post-t">${p.title}</div><div class="schip ${c[si]}" onclick="cycleStatus('${key}',this.closest('.post-c'))">${s[si]}</div></div><div class="post-meta"><span class="pfmt">${p.format}</span><span class="pdate">📅 ${p.date}</span></div></div>`;
+    });
+  });
+  const cb=document.getElementById('content-body');if(cb)cb.innerHTML=html;
+}
+function cycleStatus(key,card){
+  state.postStatus[key]=((state.postStatus[key]||0)+1)%3;
+  saveState();renderContent();
+  if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+
+function switchScreen(name,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  if(btn&&btn.classList&&btn.classList.contains('nb'))btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function render(){
+  try{renderDash();renderChecklist();renderSchedule();renderContent();}
+  catch(e){console.error('render:',e);}
+}
+loadState();
+</script>
+</body>
+</html>
