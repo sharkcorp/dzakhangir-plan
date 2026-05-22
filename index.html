@@ -581,6 +581,116 @@ body::after{
   transition:transform .1s,opacity .15s;
 }
 .hb-add:active{transform:scale(.99);opacity:.8;}
+
+/* ── FINANCE SCREEN ── */
+.fn-hero{
+  margin:4px 16px 14px;
+  background:linear-gradient(150deg,#071a10 0%,#07091c 50%,#0a0820 100%);
+  border-radius:26px;padding:22px 20px 18px;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,229,160,.1),0 24px 60px rgba(0,0,0,.7);
+}
+.fn-hero::after{
+  content:'';position:absolute;top:-70px;right:-50px;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(0,229,160,.14) 0%,transparent 65%);
+  pointer-events:none;
+}
+.fn-bloom{
+  position:absolute;left:-40px;bottom:-60px;width:240px;height:240px;
+  background:radial-gradient(circle,rgba(26,95,255,.09) 0%,transparent 65%);
+  pointer-events:none;
+}
+.fn-eyebrow{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(0,229,160,.8);text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1;}
+.fn-balance{font-size:38px;font-weight:900;line-height:1;letter-spacing:-1px;margin-bottom:14px;position:relative;z-index:1;}
+.fn-balance.pos{color:var(--green);text-shadow:0 0 24px rgba(0,229,160,.3);}
+.fn-balance.neg{color:var(--red);text-shadow:0 0 24px rgba(255,77,109,.3);}
+.fn-balance.zero{color:var(--text);}
+.fn-row2{display:flex;gap:10px;position:relative;z-index:1;}
+.fn-c2{flex:1;background:rgba(255,255,255,.04);border-radius:14px;padding:10px 12px;}
+.fn-c2-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.fn-c2-lbl.inc{color:var(--green);}
+.fn-c2-lbl.exp{color:var(--red);}
+.fn-c2-val{font-size:17px;font-weight:800;}
+.fn-c2-val.inc{color:var(--green);}
+.fn-c2-val.exp{color:var(--red);}
+/* Debt card */
+.fn-debt-card{
+  margin:0 16px 14px;
+  background:linear-gradient(155deg,rgba(255,77,109,.08) 0%,rgba(7,10,22,.99) 65%);
+  box-shadow:0 0 0 1px rgba(255,77,109,.12),0 14px 40px rgba(0,0,0,.5);
+  border-radius:20px;padding:16px;
+}
+.fn-debt-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px;}
+.fn-debt-label{font-size:12px;font-weight:700;color:var(--t2);}
+.fn-debt-sub{font-size:10px;color:var(--t3);margin-top:2px;}
+.fn-debt-remain{font-size:18px;font-weight:900;color:var(--red);flex-shrink:0;text-align:right;}
+.fn-debt-bar{height:3px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.fn-debt-fill{height:100%;background:linear-gradient(90deg,#ff4d6d,#ff8096);border-radius:6px;box-shadow:0 0 8px rgba(255,77,109,.5);transition:width .8s cubic-bezier(.4,0,.2,1);}
+.fn-debt-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);}
+/* Chart */
+.fn-chart{margin:0 16px 14px;background:rgba(10,14,30,.7);border:1px solid var(--border);border-radius:18px;padding:14px;}
+.fn-chart-hdr{font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase;margin-bottom:10px;}
+.fn-chart-svg{display:block;}
+/* Entry list */
+.fn-sec-hdr{padding:10px 20px 6px;font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.fn-sec-hdr::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+.fn-entry{margin:0 16px 8px;background:rgba(10,14,30,.8);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.fn-entry-ico{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.fn-entry-ico.inc{background:rgba(0,229,160,.1);}
+.fn-entry-ico.exp{background:rgba(255,77,109,.1);}
+.fn-entry-info{flex:1;}
+.fn-entry-cat{font-size:12px;font-weight:700;}
+.fn-entry-date{font-size:10px;color:var(--t3);margin-top:2px;}
+.fn-entry-amt{font-size:15px;font-weight:800;flex-shrink:0;}
+.fn-entry-amt.inc{color:var(--green);}
+.fn-entry-amt.exp{color:var(--red);}
+.fn-empty{text-align:center;padding:30px 20px;font-size:12px;color:var(--t3);line-height:1.7;}
+/* Add button */
+.fn-add-btn{
+  display:block;width:calc(100% - 32px);margin:8px 16px 20px;
+  padding:15px;border:none;border-radius:18px;
+  background:linear-gradient(135deg,var(--blue2),var(--purple2));
+  color:#fff;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;
+  box-shadow:0 4px 24px rgba(26,95,255,.35),0 0 0 1px rgba(79,195,247,.15);
+  transition:transform .1s,opacity .15s;
+}
+.fn-add-btn:active{transform:scale(.99);opacity:.9;}
+/* Bottom sheet */
+.fn-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;
+  align-items:flex-end;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.fn-overlay.open{display:flex;}
+.fn-sheet{
+  width:100%;background:#0c0f1e;border-radius:28px 28px 0 0;
+  border:1px solid rgba(255,255,255,.08);border-bottom:none;
+  padding:16px 20px calc(28px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 40px rgba(0,0,0,.8);
+  animation:sheet-up .28s cubic-bezier(.32,1.2,.5,1);
+  max-height:88vh;overflow-y:auto;
+}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.fn-handle{width:40px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin:0 auto 18px;}
+.fn-sh-title{font-size:18px;font-weight:800;margin-bottom:16px;}
+.fn-type-row{display:flex;gap:8px;margin-bottom:16px;}
+.fn-tbtn{flex:1;padding:10px;border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:var(--t3);transition:all .15s;}
+.fn-tbtn.fn-inc.active{background:rgba(0,229,160,.12);border-color:rgba(0,229,160,.35);color:var(--green);}
+.fn-tbtn.fn-exp.active{background:rgba(255,77,109,.12);border-color:rgba(255,77,109,.35);color:var(--red);}
+.fn-cats{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.fn-cat{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--t2);transition:all .15s;}
+.fn-cat.active{background:rgba(79,195,247,.15);border-color:rgba(79,195,247,.35);color:var(--blue);}
+.fn-amt-row{display:flex;gap:8px;margin-bottom:12px;align-items:center;}
+.fn-ai{flex:1;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:13px 14px;color:var(--text);font-size:22px;font-weight:700;outline:none;transition:border-color .2s;}
+.fn-ai:focus{border-color:rgba(79,195,247,.4);}
+.fn-au{font-size:14px;color:var(--t3);font-weight:700;flex-shrink:0;}
+.fn-usd-blk{margin-bottom:12px;}
+.fn-rate-row{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:12px;padding:10px 12px;margin-bottom:8px;}
+.fn-rl{font-size:12px;color:var(--t2);}
+.fn-ri{width:68px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px 10px;color:var(--text);font-size:14px;font-weight:700;text-align:center;outline:none;}
+.fn-quick{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+.fn-qbtn{padding:8px 16px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(255,77,109,.25);background:rgba(255,77,109,.1);color:var(--red);transition:opacity .15s;}
+.fn-qbtn:active{opacity:.7;}
+.fn-sb{width:100%;padding:15px;border:none;border-radius:18px;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--blue2),var(--purple2));color:#fff;box-shadow:0 4px 20px rgba(26,95,255,.35);}
 </style>
 </head>
 <body>
@@ -637,14 +747,6 @@ body::after{
 
   <div class="mgrid" id="mgrid"></div>
 
-  <div class="ai-bar">
-    <div class="ai-left">
-      <div class="ai-tag">AI Insight</div>
-      <div class="ai-txt">Лучшее время для поста: <strong>21:30</strong> →</div>
-    </div>
-    <div class="ai-bot">🤖</div>
-  </div>
-
   <div class="sec-hdr">Обновить метрики</div>
   <div class="inp-rows">
     <div class="inp-row"><span class="inp-em">📢</span><span class="inp-lbl">Подписчики TG</span><input class="inp-field" id="inp-tg" type="number" min="0" max="9999"></div>
@@ -679,11 +781,40 @@ body::after{
   <div class="spanel" id="spanel-fit"></div>
 </div>
 
-<!-- ══ CONTENT ══ -->
-<div class="screen" id="screen-content">
-  <div class="shdr"><div class="shdr-t">Контент</div></div>
-  <div class="pipeline" id="pipeline"></div>
-  <div id="content-body"></div>
+<!-- ══ FINANCE ══ -->
+<div class="screen" id="screen-finance">
+  <div class="shdr"><div class="shdr-t">Финансы</div></div>
+  <div id="finance-body"></div>
+</div>
+
+<!-- BOTTOM SHEET -->
+<div class="fn-overlay" id="fn-overlay" onclick="closeFnSheet(event)">
+  <div class="fn-sheet">
+    <div class="fn-handle"></div>
+    <div class="fn-sh-title">Добавить запись</div>
+    <div class="fn-type-row">
+      <button class="fn-tbtn fn-inc active" id="fn-t-inc" onclick="setFnType('income')">▲ Доход</button>
+      <button class="fn-tbtn fn-exp" id="fn-t-exp" onclick="setFnType('expense')">▼ Расход</button>
+    </div>
+    <div id="fn-cats" class="fn-cats"></div>
+    <div id="fn-usd-row" class="fn-usd-blk" style="display:none">
+      <div class="fn-rate-row">
+        <span class="fn-rl">Курс $1 =</span>
+        <input class="fn-ri" id="fn-rate" type="number" value="90" oninput="onFnRateInput()">
+        <span class="fn-rl">₽ · <span id="fn-rub-preview">0 ₽</span></span>
+      </div>
+      <div class="fn-amt-row">
+        <input class="fn-ai" id="fn-usd-amt" type="number" min="0" placeholder="0" oninput="onFnUsdInput()">
+        <span class="fn-au">$</span>
+      </div>
+    </div>
+    <div id="fn-rub-row" class="fn-amt-row">
+      <input class="fn-ai" id="fn-amt" type="number" min="0" placeholder="0">
+      <span class="fn-au">₽</span>
+    </div>
+    <div id="fn-quick" class="fn-quick" style="display:none"></div>
+    <button class="fn-sb" onclick="saveFnEntry()">Сохранить</button>
+  </div>
 </div>
 
 <!-- ══ FLOATING NAV DOCK ══ -->
@@ -696,16 +827,13 @@ body::after{
     <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
     Привычки
   </button>
-  <button class="nav-ai" onclick="switchScreen('dash',document.querySelector('.nb'))">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M12 11v2m0 4h.01M5 20a7 7 0 0114 0"/><circle cx="12" cy="12" r="10"/></svg>
-  </button>
   <button class="nb" onclick="switchScreen('schedule',this)">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
     Режим
   </button>
-  <button class="nb" onclick="switchScreen('content',this)">
-    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></svg>
-    Контент
+  <button class="nb" onclick="switchScreen('finance',this)">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Финансы
   </button>
 </nav>
 
@@ -733,7 +861,7 @@ if(tg){tg.ready();tg.expand();}
   img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';
 })();
 
-let state={checks:{},metrics:{tg_subs:298,smoke:5,ozon_shifts:0,camry:0,income:0},postStatus:{}};
+let state={checks:{},metrics:{tg_subs:298,smoke:5,ozon_shifts:0,camry:0,income:0},postStatus:{},habits:{},finance:{entries:[],usdRate:90}};
 
 function loadState(){
   try{const s=localStorage.getItem('plan_v4');if(s)Object.assign(state,JSON.parse(s));}catch(e){}
@@ -870,10 +998,8 @@ function saveMetrics(){
 
 const HABITS=[
   {id:'workout',name:'Тренировка',icon:'🏋',color:'bl',freq:'Пн · Ср · Пт'},
-  {id:'reading',name:'Чтение',icon:'📚',color:'pu',freq:'Каждый день'},
-  {id:'water',name:'Вода 2л',icon:'💧',color:'cy',freq:'Каждый день'},
-  {id:'english',name:'Английский',icon:'🇬🇧',color:'yl',freq:'Каждый день'},
   {id:'content',name:'Контент',icon:'📝',color:'gr',freq:'Рабочие дни'},
+  {id:'nosmoke',name:'Не курил',icon:'🚭',color:'pu',freq:'Каждый день'},
 ];
 function dateKeyOf(d){
   return`${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getFullYear()).slice(2)}`;
@@ -1009,37 +1135,172 @@ function switchSTab(n,el){
   document.getElementById('spanel-'+n).classList.add('active');
 }
 
-function renderContent(){
-  const m=state.metrics;
-  const s=['📝 Идея','✍️ Готовится','✅ Опубликован'],c=['si','sr','sd'];
-  const idea=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===0).length,0);
-  const ready=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===1).length,0);
-  const done2=POSTS.reduce((a,w)=>a+w.items.filter((_,pi)=>(state.postStatus[w.week+'_'+pi]||0)===2).length,0);
-  const pf=document.getElementById('pipeline');
-  if(pf)pf.innerHTML=`
-    <div class="ps"><div class="pc">💡<span class="pb">${idea}</span></div><div class="pl">Идеи</div></div>
-    <div class="parr">→</div>
-    <div class="ps"><div class="pc">📝<span class="pb">${ready}</span></div><div class="pl">Сценарий</div></div>
-    <div class="parr">→</div>
-    <div class="ps"><div class="pc">✂️<span class="pb p">0</span></div><div class="pl">Монтаж</div></div>
-    <div class="parr">→</div>
-    <div class="ps"><div class="pc">📤<span class="pb y">0</span></div><div class="pl">Постинг</div></div>
-    <div class="parr">→</div>
-    <div class="ps"><div class="pc">📊<span class="pb g">${m.tg_subs}</span></div><div class="pl">Итог</div></div>`;
-  let html='';
-  POSTS.forEach(week=>{
-    html+=`<div class="whdr">${week.week}</div>`;
-    week.items.forEach((p,pi)=>{
-      const key=week.week+'_'+pi,si2=state.postStatus[key]||0;
-      html+=`<div class="post-c"><div class="post-top"><div class="post-t">${p.title}</div><div class="schip ${c[si2]}" onclick="cycleStatus('${key}')">${s[si2]}</div></div><div class="post-meta"><span class="pfmt">${p.format}</span><span class="pdate">📅 ${p.date}</span></div></div>`;
-    });
-  });
-  const cb=document.getElementById('content-body');if(cb)cb.innerHTML=html;
+/* ── FINANCE ── */
+const FN_DEBT=540000;
+let fnForm={type:'income',cat:''};
+function initFn(){if(!state.finance)state.finance={entries:[],usdRate:90};}
+function fmtRub(n){return Math.abs(Math.round(n)).toLocaleString('ru')+' ₽';}
+function parseDK(k){const[d,m,y]=k.split('.');return new Date(`20${y}-${m}-${d}`);}
+
+function renderFinance(){
+  initFn();
+  const{entries,usdRate}=state.finance;
+  const totalInc=entries.filter(e=>e.type==='income').reduce((a,e)=>a+e.amt,0);
+  const totalExp=entries.filter(e=>e.type==='expense').reduce((a,e)=>a+e.amt,0);
+  const bal=totalInc-totalExp;
+  const debtPaid=entries.filter(e=>e.type==='expense'&&['Кредит Сбер','Кредит Яндекс'].includes(e.cat)).reduce((a,e)=>a+e.amt,0);
+  const debtRemain=Math.max(0,FN_DEBT-debtPaid);
+  const debtPct=Math.min(100,Math.round(debtPaid/FN_DEBT*100));
+  const balCls=bal>0?'pos':bal<0?'neg':'zero';
+
+  let html=`<div class="fn-hero">
+    <div class="fn-bloom"></div>
+    <div style="position:relative;z-index:1">
+      <div class="fn-eyebrow">БАЛАНС</div>
+      <div class="fn-balance ${balCls}">${bal<0?'−':''}${fmtRub(bal)}</div>
+      <div class="fn-row2">
+        <div class="fn-c2"><div class="fn-c2-lbl inc">▲ ДОХОДЫ</div><div class="fn-c2-val inc">${fmtRub(totalInc)}</div></div>
+        <div class="fn-c2"><div class="fn-c2-lbl exp">▼ РАСХОДЫ</div><div class="fn-c2-val exp">${fmtRub(totalExp)}</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="fn-debt-card">
+    <div class="fn-debt-top">
+      <div><div class="fn-debt-label">До закрытия долгов</div><div class="fn-debt-sub">Сбер 200 000 + Яндекс 340 000 ₽</div></div>
+      <div class="fn-debt-remain">${fmtRub(debtRemain)}</div>
+    </div>
+    <div class="fn-debt-bar"><div class="fn-debt-fill" style="width:${debtPct}%"></div></div>
+    <div class="fn-debt-meta"><span>Внесено ${fmtRub(debtPaid)}</span><span>${debtPct}% погашено</span></div>
+  </div>`;
+
+  html+=fnChart(entries);
+
+  const incE=[...entries].filter(e=>e.type==='income').reverse();
+  const expE=[...entries].filter(e=>e.type==='expense').reverse();
+  if(incE.length){
+    html+=`<div class="fn-sec-hdr">Доходы</div>`;
+    incE.forEach(e=>{html+=`<div class="fn-entry"><div class="fn-entry-ico inc">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}${e.amtUsd?' · $'+e.amtUsd:''}</div></div><div class="fn-entry-amt inc">+${fmtRub(e.amt)}</div></div>`;});
+  }
+  if(expE.length){
+    html+=`<div class="fn-sec-hdr">Расходы</div>`;
+    expE.forEach(e=>{html+=`<div class="fn-entry"><div class="fn-entry-ico exp">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}</div></div><div class="fn-entry-amt exp">−${fmtRub(e.amt)}</div></div>`;});
+  }
+  if(!entries.length)html+=`<div class="fn-empty">Пока нет записей 💸<br>Нажми кнопку ниже чтобы начать</div>`;
+  html+=`<button class="fn-add-btn" onclick="openFnSheet()">＋ Добавить запись</button>`;
+
+  const el=document.getElementById('finance-body');
+  if(el)el.innerHTML=html;
 }
-function cycleStatus(key){
-  state.postStatus[key]=((state.postStatus[key]||0)+1)%3;
-  saveState();renderContent();
+
+function fnChart(entries){
+  if(entries.length<2)return'';
+  const W=300,H=56,P=4;
+  const map={};
+  entries.forEach(e=>{if(!map[e.date])map[e.date]=0;map[e.date]+=e.type==='income'?e.amt:-e.amt;});
+  const dates=Object.keys(map).sort((a,b)=>parseDK(a)-parseDK(b));
+  if(dates.length<2)return'';
+  const pts=[];let run=0;
+  dates.forEach(d=>{run+=map[d];pts.push(run);});
+  const mn=Math.min(0,...pts),mx=Math.max(...pts,1),rng=mx-mn||1;
+  const pp=pts.map((v,i)=>{
+    const x=P+(i/(pts.length-1))*(W-2*P);
+    const y=P+(1-(v-mn)/rng)*(H-2*P);
+    return x.toFixed(1)+','+y.toFixed(1);
+  }).join(' ');
+  const zY=(P+(1-(0-mn)/rng)*(H-2*P)).toFixed(1);
+  const fill=P+','+zY+' '+pp+' '+(W-P)+','+zY;
+  return`<div class="fn-chart"><div class="fn-chart-hdr">Динамика баланса</div>
+  <svg width="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="fn-chart-svg">
+    <defs><linearGradient id="fcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(0,229,160,.28)"/><stop offset="100%" stop-color="rgba(0,229,160,0)"/></linearGradient></defs>
+    <polygon points="${fill}" fill="url(#fcg)"/>
+    <polyline points="${pp}" fill="none" stroke="#00e5a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px rgba(0,229,160,.6))"/>
+  </svg></div>`;
+}
+
+function fnIco(cat){
+  return{'Bybit рефералки':'₿','Смена Озон':'📦','Другое':'💰','Кредит Сбер':'🏦','Кредит Яндекс':'🏦','Продукты':'🛒','Дети':'👶'}[cat]||'💸';
+}
+
+function openFnSheet(){
+  initFn();
+  fnForm={type:'income',cat:''};
+  document.getElementById('fn-overlay').classList.add('open');
+  document.getElementById('fn-t-inc').classList.add('active');
+  document.getElementById('fn-t-exp').classList.remove('active');
+  document.getElementById('fn-amt').value='';
+  const ua=document.getElementById('fn-usd-amt');if(ua)ua.value='';
+  const pr=document.getElementById('fn-rub-preview');if(pr)pr.textContent='0 ₽';
+  document.getElementById('fn-usd-row').style.display='none';
+  document.getElementById('fn-rub-row').style.display='flex';
+  document.getElementById('fn-quick').style.display='none';
+  document.getElementById('fn-rate').value=state.finance.usdRate||90;
+  fnRenderCats();
   if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+function closeFnSheet(ev){
+  if(ev.target===document.getElementById('fn-overlay'))
+    document.getElementById('fn-overlay').classList.remove('open');
+}
+function setFnType(t){
+  fnForm.type=t;fnForm.cat='';
+  document.getElementById('fn-t-inc').classList.toggle('active',t==='income');
+  document.getElementById('fn-t-exp').classList.toggle('active',t==='expense');
+  document.getElementById('fn-usd-row').style.display='none';
+  document.getElementById('fn-rub-row').style.display='flex';
+  document.getElementById('fn-quick').style.display='none';
+  fnRenderCats();
+}
+function fnRenderCats(){
+  const inc=['Bybit рефералки','Смена Озон','Другое'];
+  const exp=['Кредит Сбер','Кредит Яндекс','Продукты','Дети','Другое'];
+  const cats=fnForm.type==='income'?inc:exp;
+  const el=document.getElementById('fn-cats');
+  if(el)el.innerHTML=cats.map(c=>`<button class="fn-cat${fnForm.cat===c?' active':''}" onclick="selectFnCat('${c}')">${c}</button>`).join('');
+}
+function selectFnCat(cat){
+  fnForm.cat=cat;fnRenderCats();
+  const isUsd=cat==='Bybit рефералки';
+  document.getElementById('fn-usd-row').style.display=isUsd?'block':'none';
+  document.getElementById('fn-rub-row').style.display=isUsd?'none':'flex';
+  const q=document.getElementById('fn-quick');
+  if(cat==='Кредит Сбер'){q.style.display='flex';q.innerHTML=`<button class="fn-qbtn" onclick="setFnAmt(10000)">10 000 ₽</button>`;}
+  else if(cat==='Кредит Яндекс'){q.style.display='flex';q.innerHTML=`<button class="fn-qbtn" onclick="setFnAmt(21000)">21 000 ₽</button>`;}
+  else{q.style.display='none';q.innerHTML='';}
+  if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+function setFnAmt(v){const i=document.getElementById('fn-amt');if(i)i.value=v;}
+function onFnRateInput(){
+  const rate=parseFloat(document.getElementById('fn-rate')?.value)||90;
+  const usd=parseFloat(document.getElementById('fn-usd-amt')?.value)||0;
+  const p=document.getElementById('fn-rub-preview');if(p)p.textContent=Math.round(usd*rate).toLocaleString('ru')+' ₽';
+  state.finance.usdRate=rate;
+}
+function onFnUsdInput(){
+  const rate=parseFloat(document.getElementById('fn-rate')?.value)||90;
+  const usd=parseFloat(document.getElementById('fn-usd-amt')?.value)||0;
+  const p=document.getElementById('fn-rub-preview');if(p)p.textContent=Math.round(usd*rate).toLocaleString('ru')+' ₽';
+}
+function saveFnEntry(){
+  initFn();
+  if(!fnForm.cat){if(tg)tg.HapticFeedback?.notificationOccurred('error');return;}
+  let amt=0,amtUsd=null;
+  if(fnForm.cat==='Bybit рефералки'){
+    const usd=parseFloat(document.getElementById('fn-usd-amt')?.value)||0;
+    const rate=parseFloat(document.getElementById('fn-rate')?.value)||90;
+    if(!usd){if(tg)tg.HapticFeedback?.notificationOccurred('error');return;}
+    amt=Math.round(usd*rate);amtUsd=usd;
+    state.finance.usdRate=rate;
+  }else{
+    amt=parseInt(document.getElementById('fn-amt')?.value)||0;
+    if(!amt){if(tg)tg.HapticFeedback?.notificationOccurred('error');return;}
+  }
+  const entry={id:Date.now().toString(),type:fnForm.type,cat:fnForm.cat,amt,date:todayKey()};
+  if(amtUsd!==null)entry.amtUsd=amtUsd;
+  state.finance.entries.push(entry);
+  saveState();
+  document.getElementById('fn-overlay').classList.remove('open');
+  renderFinance();
+  if(tg)tg.HapticFeedback?.notificationOccurred('success');
 }
 
 function switchScreen(name,btn){
@@ -1051,7 +1312,7 @@ function switchScreen(name,btn){
 }
 
 function render(){
-  try{renderDash();renderHabits();renderSchedule();renderContent();}
+  try{renderDash();renderHabits();renderSchedule();renderFinance();}
   catch(e){console.error('render:',e);}
 }
 loadState();
