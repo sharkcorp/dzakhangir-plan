@@ -634,7 +634,7 @@ body::after{
 /* Entry list */
 .fn-sec-hdr{padding:10px 20px 6px;font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--t3);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
 .fn-sec-hdr::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
-.fn-entry{margin:0 16px 8px;background:rgba(10,14,30,.8);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.fn-entry{margin:0 16px 8px;background:rgba(10,14,30,.8);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;position:relative;}
 .fn-entry-ico{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .fn-entry-ico.inc{background:rgba(0,229,160,.1);}
 .fn-entry-ico.exp{background:rgba(255,77,109,.1);}
@@ -644,6 +644,10 @@ body::after{
 .fn-entry-amt{font-size:15px;font-weight:800;flex-shrink:0;}
 .fn-entry-amt.inc{color:var(--green);}
 .fn-entry-amt.exp{color:var(--red);}
+.fn-entry-actions{display:flex;gap:6px;flex-shrink:0;opacity:0;transition:opacity 200ms;}
+.fn-entry:hover .fn-entry-actions{opacity:1;}
+.fn-action-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 150ms;color:var(--t2);}
+.fn-action-btn:active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);}
 .fn-empty{text-align:center;padding:30px 20px;font-size:12px;color:var(--t3);line-height:1.7;}
 /* Add button */
 .fn-add-btn{
@@ -1152,7 +1156,7 @@ function switchSTab(n,el){
 
 /* ── FINANCE ── */
 const FN_DEBT=540000;
-let fnForm={type:'income',cat:''};
+let fnForm={type:'income',cat:'',editIdx:null};
 function initFn(){if(!state.finance)state.finance={entries:[],usdRate:90};}
 function fmtRub(n){return Math.abs(Math.round(n)).toLocaleString('ru')+' ₽';}
 function parseDK(k){const[d,m,y]=k.split('.');return new Date(`20${y}-${m}-${d}`);}
@@ -1194,11 +1198,11 @@ function renderFinance(){
   const expE=[...entries].filter(e=>e.type==='expense').reverse();
   if(incE.length){
     html+=`<div class="fn-sec-hdr">Доходы</div>`;
-    incE.forEach(e=>{html+=`<div class="fn-entry"><div class="fn-entry-ico inc">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}${e.amtUsd?' · $'+e.amtUsd:''}</div></div><div class="fn-entry-amt inc">+${fmtRub(e.amt)}</div></div>`;});
+    incE.forEach(e=>{const idx=entries.indexOf(e);html+=`<div class="fn-entry"><div class="fn-entry-ico inc">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}${e.amtUsd?' · $'+e.amtUsd:''}</div></div><div class="fn-entry-amt inc">+${fmtRub(e.amt)}</div><div class="fn-entry-actions"><button class="fn-action-btn" onclick="editFnEntry(${idx})">✏️</button><button class="fn-action-btn" onclick="deleteFnEntry(${idx})">🗑️</button></div></div>`;});
   }
   if(expE.length){
     html+=`<div class="fn-sec-hdr">Расходы</div>`;
-    expE.forEach(e=>{html+=`<div class="fn-entry"><div class="fn-entry-ico exp">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}</div></div><div class="fn-entry-amt exp">−${fmtRub(e.amt)}</div></div>`;});
+    expE.forEach(e=>{const idx=entries.indexOf(e);html+=`<div class="fn-entry"><div class="fn-entry-ico exp">${fnIco(e.cat)}</div><div class="fn-entry-info"><div class="fn-entry-cat">${e.cat}</div><div class="fn-entry-date">${e.date}</div></div><div class="fn-entry-amt exp">−${fmtRub(e.amt)}</div><div class="fn-entry-actions"><button class="fn-action-btn" onclick="editFnEntry(${idx})">✏️</button><button class="fn-action-btn" onclick="deleteFnEntry(${idx})">🗑️</button></div></div>`;});
   }
   if(!entries.length)html+=`<div class="fn-empty">Пока нет записей 💸<br>Нажми кнопку ниже чтобы начать</div>`;
   html+=`<button class="fn-add-btn" onclick="openFnSheet()">＋ Добавить запись</button>`;
@@ -1238,7 +1242,7 @@ function fnIco(cat){
 
 function openFnSheet(){
   initFn();
-  fnForm={type:'income',cat:''};
+  fnForm={type:'income',cat:'',editIdx:null};
   document.getElementById('fn-overlay').classList.add('open');
   document.getElementById('fn-t-inc').classList.add('active');
   document.getElementById('fn-t-exp').classList.remove('active');
@@ -1249,8 +1253,44 @@ function openFnSheet(){
   document.getElementById('fn-rub-row').style.display='flex';
   document.getElementById('fn-quick').style.display='none';
   document.getElementById('fn-rate').value=state.finance.usdRate||90;
+  document.getElementById('fn-sh-title').textContent='Добавить запись';
+  const sb=document.querySelector('.fn-sb');if(sb)sb.textContent='Сохранить';
   fnRenderCats();
   if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+
+function editFnEntry(idx){
+  initFn();
+  const e=state.finance.entries[idx];
+  if(!e)return;
+  fnForm={type:e.type,cat:e.cat,editIdx:idx};
+  document.getElementById('fn-overlay').classList.add('open');
+  document.getElementById('fn-t-inc').classList.toggle('active',e.type==='income');
+  document.getElementById('fn-t-exp').classList.toggle('active',e.type==='expense');
+  const isUsd=e.cat==='Bybit рефералки';
+  if(isUsd){
+    const ua=document.getElementById('fn-usd-amt');if(ua)ua.value=e.amtUsd||'';
+    document.getElementById('fn-usd-row').style.display='block';
+    document.getElementById('fn-rub-row').style.display='none';
+    const p=document.getElementById('fn-rub-preview');if(p)p.textContent=e.amt+' ₽';
+  }else{
+    const am=document.getElementById('fn-amt');if(am)am.value=e.amt;
+    document.getElementById('fn-usd-row').style.display='none';
+    document.getElementById('fn-rub-row').style.display='flex';
+  }
+  document.getElementById('fn-rate').value=state.finance.usdRate||90;
+  document.getElementById('fn-sh-title').textContent='Редактировать запись';
+  const sb=document.querySelector('.fn-sb');if(sb)sb.textContent='Обновить';
+  fnRenderCats();
+  if(tg)tg.HapticFeedback?.impactOccurred('light');
+}
+
+function deleteFnEntry(idx){
+  if(confirm('Удалить эту запись?')){
+    state.finance.entries.splice(idx,1);
+    saveState();renderFinance();
+    if(tg)tg.HapticFeedback?.notificationOccurred('success');
+  }
 }
 function closeFnSheet(ev){
   if(ev.target===document.getElementById('fn-overlay'))
@@ -1309,9 +1349,15 @@ function saveFnEntry(){
     amt=parseInt(document.getElementById('fn-amt')?.value)||0;
     if(!amt){if(tg)tg.HapticFeedback?.notificationOccurred('error');return;}
   }
-  const entry={id:Date.now().toString(),type:fnForm.type,cat:fnForm.cat,amt,date:todayKey()};
-  if(amtUsd!==null)entry.amtUsd=amtUsd;
-  state.finance.entries.push(entry);
+  if(fnForm.editIdx!==null&&fnForm.editIdx!==undefined){
+    const e=state.finance.entries[fnForm.editIdx];
+    e.type=fnForm.type;e.cat=fnForm.cat;e.amt=amt;
+    if(amtUsd!==null)e.amtUsd=amtUsd;else delete e.amtUsd;
+  }else{
+    const entry={id:Date.now().toString(),type:fnForm.type,cat:fnForm.cat,amt,date:todayKey()};
+    if(amtUsd!==null)entry.amtUsd=amtUsd;
+    state.finance.entries.push(entry);
+  }
   saveState();
   document.getElementById('fn-overlay').classList.remove('open');
   renderFinance();
