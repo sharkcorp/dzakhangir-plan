@@ -65,6 +65,21 @@ body::after{
   border-radius:50%;background:var(--red);border:1.5px solid var(--bg);
   box-shadow:0 0 6px rgba(255,77,109,.8);
 }
+.edit-mode-btn{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  cursor:pointer;transition:all 200ms;color:var(--t2);
+}
+.edit-mode-btn.active{
+  background:rgba(79,195,247,.2);border-color:rgba(79,195,247,.5);
+  color:#4FA7FF;box-shadow:0 0 12px rgba(79,195,247,.3);
+}
+/* Edit mode visible actions */
+.edit-actions{display:none;gap:4px;flex-shrink:0;}
+body.edit-mode .edit-actions{display:flex;}
+.edit-action-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 150ms;color:var(--t2);}
+.edit-action-btn:active{background:rgba(255,255,255,.15);}
 
 /* ── HERO CARD ── */
 .hero{
@@ -710,6 +725,7 @@ body::after{
       <div class="tb-sub">Система активна · Фокус на цели</div>
     </div>
     <div class="bell">🔔<div class="bell-dot"></div></div>
+    <button class="edit-mode-btn" id="edit-mode-toggle" onclick="toggleEditMode()">✏️</button>
   </div>
 
   <div class="hero">
@@ -870,7 +886,7 @@ if(tg){tg.ready();tg.expand();}
   img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%;';
 })();
 
-let state={checks:{},metrics:{tg_subs:298,smoke:5,ozon_shifts:0,camry:0,income:0},postStatus:{},habits:{},finance:{entries:[],usdRate:90}};
+let state={checks:{},metrics:{tg_subs:298,smoke:5,ozon_shifts:0,camry:0,income:0},postStatus:{},habits:{},finance:{entries:[],usdRate:90},editMode:false};
 
 function loadState(){
   try{const s=localStorage.getItem('plan_v4');if(s)Object.assign(state,JSON.parse(s));}catch(e){}
@@ -1096,7 +1112,10 @@ function renderHabits(){
       <div class="hb-top">
         <div class="hb-ico">${hab.icon}</div>
         <div class="hb-info"><div class="hb-name">${hab.name}</div><div class="hb-freq">${hab.freq}</div></div>
-        <div class="hb-stk">${stk>0?'🔥'+stk:'—'}</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="hb-stk">${stk>0?'🔥'+stk:'—'}</div>
+          <div class="edit-actions"><button class="edit-action-btn" onclick="editHabit('${hab.id}')">✏️</button><button class="edit-action-btn" onclick="deleteHabit('${hab.id}')">🗑️</button></div>
+        </div>
       </div>
       <div class="hb-week">${dots}</div>
       <button class="hb-btn ${isDone?'done':'idle'}" onclick="toggleHabit('${hab.id}')">
@@ -1115,6 +1134,22 @@ function toggleHabit(id){
   if(!state.habits[k])delete state.habits[k];
   saveState();renderHabits();
   if(tg)tg.HapticFeedback?.impactOccurred('medium');
+}
+
+function editHabit(id){
+  const h=HABITS.find(x=>x.id===id);
+  if(!h)return;
+  const newName=prompt('Название привычки:',h.name);
+  if(newName){h.name=newName;saveState();renderHabits();}
+}
+
+function deleteHabit(id){
+  if(confirm('Удалить привычку?')){
+    const idx=HABITS.findIndex(x=>x.id===id);
+    if(idx>=0)HABITS.splice(idx,1);
+    Object.keys(state.habits).forEach(k=>{if(k.startsWith(id+'_'))delete state.habits[k];});
+    saveState();renderHabits();
+  }
 }
 function renderChecklist(){
   const today=todayKey();let html='';
@@ -1370,6 +1405,14 @@ function switchScreen(name,btn){
   document.getElementById('screen-'+name).classList.add('active');
   if(btn&&btn.classList&&btn.classList.contains('nb'))btn.classList.add('active');
   window.scrollTo(0,0);
+}
+
+function toggleEditMode(){
+  state.editMode=!state.editMode;
+  document.body.classList.toggle('edit-mode',state.editMode);
+  document.getElementById('edit-mode-toggle').classList.toggle('active',state.editMode);
+  saveState();render();
+  if(tg)tg.HapticFeedback?.impactOccurred('medium');
 }
 
 function render(){
